@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--  Darwin Gonzalo Fonseca Abril
+ ID 436354 
+ Area del Terreno Google API Key = AIzaSyB_jS3_oh1rEaovbgFhR3QDViBg3sJati0 -->
+
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Área del Mapa</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 50%;
+        width: auto;
+      }
+      #botones{
+        height: auto;
+        width: auto;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #floating-panel {
+        position: fix;
+        //Posicion original: absolute;
+        top: 5px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 15px;
+        padding-left: 10px;
+      }
+    </style>
+  </head>
+    <body onload="initialize()">
+      <div id="floating-panel">
+        <input onclick="clearMarkers();" type=button value="Ocultar Markers">
+        <input onclick="showMarkers();" type=button value="Mostrar Markers">
+        <input onclick="deleteMarkers();" type=button value="Borrar Markers">
+      </div>
+
+    <div id="map"></div>
+
+    <h5>Click en el mapa para agregar marcador.</h5>
+
+    <script>
+
+      // In the following example, markers appear when the user clicks on the map.
+      // The markers are stored in an array.
+      // The user can then click an option to hide, show or delete the markers.
+      var map;
+      var markers = [];
+
+      function initMap() {
+
+        var Uniminuto = {lat: 4.698162162531329, lng: -74.08907175064087};
+
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: Uniminuto,
+          //mapTypeId: 'terrain'
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+        });
+
+        // This event listener will call addMarker() when the map is clicked.
+        map.addListener('click', function(event) {
+          addMarker(event.latLng);
+		});
+
+		google.maps.event.addListener(marker, "dragend", function() {
+          getCoords(marker);
+        });
+        // Adds a marker at the center of the map.
+        //addMarker(haightAshbury);
+      }
+
+      // Adds a marker to the map and push to the array.
+      function addMarker(location) {
+        var marker = new google.maps.Marker({
+          position: location,
+          draggable: true,
+          animation: google.maps.Animation.DROP,
+          //label: labels[labelIndex++ % labels.length],
+          map: map
+        });
+        markers.push(marker);
+        misMarcadores.push(location);
+        getCoords(marker);
+
+		
+
+        google.maps.event.addListener(marker, "dragend", function() {
+          getCoords(marker);
+        });
+      }
+
+      // Sets the map on all markers in the array.
+      function setMapOnAll(map) {
+        for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(map);
+        }
+      }
+
+      // Removes the markers from the map, but keeps them in the array.
+      function clearMarkers() {
+        setMapOnAll(null);
+      }
+
+      // Shows any markers currently in the array.
+      function showMarkers() {
+        setMapOnAll(map);
+      }
+
+      // Deletes all markers in the array by removing references to them.
+      function deleteMarkers() {
+        clearMarkers();
+        markers = [];
+      }
+    </script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_jS3_oh1rEaovbgFhR3QDViBg3sJati0&callback=initMap"></script>
+
+    <div id="map_canvas">
+    <!--br><font color="#0000FF"><strong id="loglat">Latitud:</strong></font>    <br><font color="#FF0000"><strong id="loglong">Longitud:</strong></font-->
+	</div>
+    <div id="Botones">
+        
+		
+        <!--input onclick="convertirAngulos()" value="Try it"  type="button"-->
+		<center> 
+		<!--input onclick="markers.forEach(AsignarCoordenadas);" type="button" value="Mostrar"-->
+		<input onclick="calcularArea()" type="button" value="Calcular">
+		</center>
+        <p id="CLat"><br>Coordenadas Lat</p>
+        <p id="CLon"><br>Coordenadas Lng</p>
+        <p id="Respuesta"><br>Total: </p>
+
+        <div id="VerDatos"></div>
+
+        <script>
+
+		var Latitudes = [];
+        document.getElementById("CLat").innerHTML = Latitudes;
+
+        var Longitudes = [];
+        document.getElementById("CLon").innerHTML = Longitudes;
+
+
+
+        function getCoords(marker){
+          //document.getElementById("VerDatos").innerHTML="Latitud: " + marker.getPosition().lat() + " Longitud:  " + marker.getPosition().lng() + "<br>";
+		}
+
+        function AsignarCoordenadas(marker) {
+          
+		  VerDatos = document.getElementById("VerDatos");
+          VerDatos.innerHTML=VerDatos.innerHTML+"Latitud: " + marker.getPosition().lat()+ " Longitud: " + marker.getPosition().lng() + "<br>";
+			//Envío el valor numérico en a los arreglos correspondientes.
+			Latitudes.push(Number(marker.getPosition().lat()));
+			Longitudes.push(Number(marker.getPosition().lng()));
+		}
+		
+ 		
+		
+		function calcularArea(){
+		var a=0;
+		var b=0;
+		var x=0;
+		var i=0;
+		document.getElementById("VerDatos").innerHTML="";
+		markers.forEach(AsignarCoordenadas);
+
+			for(i=0;i<Latitudes.length; i++){
+				  if(i!=(Latitudes.length-1)){
+		  			  a=a+(Latitudes[i]*Longitudes[(i+1)]);
+		  			  b=b+(Latitudes[(i+1)]*Longitudes[i]);
+					}else{
+		  			 a=a+(Latitudes[i]*Longitudes[0]);
+		  			 b=b+(Latitudes[0]*Longitudes[i]);
+					}
+			  }
+			x=(a-b)/2;
+			if(x<0){
+				x=Math.abs(x);
+			}
+            document.getElementById("Respuesta").innerHTML = "El area es: "+ x + "<br>A es: "+a+"<br>B es: "+b
+			+ "<br>El tamaño del Array: "+Latitudes.length+ "<br>Posicion de i: "+i
+			;
+		}
+		
+		function convertirAngulos(){
+			var lat1=4.758081956693753;
+			var lat2=-74.150869846344;
+			var R = 6371e3; // metres
+			var φ1 = lat1.toRadians();
+			var φ2 = lat2.toRadians();
+			var Δφ = (lat2-lat1).toRadians();
+			var Δλ = (lon2-lon1).toRadians();
+			var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+					Math.cos(φ1) * Math.cos(φ2) *
+					Math.sin(Δλ/2) * Math.sin(Δλ/2);
+			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+			var d = R * c;
+			document.getElementById("Respuesta").innerHTML = "El area es: "+ d
+			;
+		}
+
+        </script>
+      </div>
+  </body>
+</html>
