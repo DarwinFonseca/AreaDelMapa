@@ -172,14 +172,19 @@
  		
 		
 		function calcularArea(){
+		
+		document.getElementById("VerDatos").innerHTML="";
+		markers.forEach(AsignarCoordenadas);
 		var a=0;
 		var b=0;
 		var x=0;
 		var i=0;
-		document.getElementById("VerDatos").innerHTML="";
-		markers.forEach(AsignarCoordenadas);
-
 			for(i=0;i<Latitudes.length; i++){
+			if(i==0){
+			a=0;
+			b=0;
+			x=0;
+			}
 				  if(i!=(Latitudes.length-1)){
 		  			  a=a+(Latitudes[i]*Longitudes[(i+1)]);
 		  			  b=b+(Latitudes[(i+1)]*Longitudes[i]);
@@ -193,7 +198,7 @@
 				x=Math.abs(x);
 			}
             document.getElementById("Respuesta").innerHTML = "El area es: "+ x + "<br>A es: "+a+"<br>B es: "+b
-			+ "<br>El tamaño del Array: "+Latitudes.length+ "<br>Posicion de i: "+i
+			//+ "<br>El tamaño del Array: "+Latitudes.length+ "<br>Posicion de i: "+i
 			;
 		}
 		

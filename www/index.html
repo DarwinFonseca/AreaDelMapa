@@ -172,49 +172,39 @@
  		
 		
 		function calcularArea(){
+		
+		document.getElementById("VerDatos").innerHTML="";
+		markers.forEach(AsignarCoordenadas);
 		var a=0;
 		var b=0;
 		var x=0;
 		var i=0;
-		document.getElementById("VerDatos").innerHTML="";
-		markers.forEach(AsignarCoordenadas);
-
+		var toRad=Math.PI/180;
 			for(i=0;i<Latitudes.length; i++){
+			if(i==0){
+			a=0;
+			b=0;
+			x=0;
+			}
 				  if(i!=(Latitudes.length-1)){
-		  			  a=a+(Latitudes[i]*Longitudes[(i+1)]);
-		  			  b=b+(Latitudes[(i+1)]*Longitudes[i]);
+		  			  a=a+( (Math.abs(Latitudes[i])*toRad) * (Math.abs(Longitudes[(i+1)])*toRad) );
+		  			  b=b+( (Math.abs(Latitudes[(i+1)])*toRad) * (Math.abs(Longitudes[i])*toRad) );
 					}else{
-		  			 a=a+(Latitudes[i]*Longitudes[0]);
-		  			 b=b+(Latitudes[0]*Longitudes[i]);
+		  			 a=a+( (Math.abs(Latitudes[i])*toRad) * (Math.abs(Longitudes[0])*toRad) );
+		  			 b=b+( (Math.abs(Latitudes[0])*toRad) * (Math.abs(Longitudes[i])*toRad) );
 					}
 			  }
-			x=(a-b)/2;
+			x=((a-b)/2) * 1000000000;
 			if(x<0){
 				x=Math.abs(x);
 			}
-            document.getElementById("Respuesta").innerHTML = "El area es: "+ x + "<br>A es: "+a+"<br>B es: "+b
+            document.getElementById("Respuesta").innerHTML = "El area es: "+ x +" Km<sup>2</sup>.<br>A es: "+a+"<br>B es: "+b
 			//+ "<br>El tamaño del Array: "+Latitudes.length+ "<br>Posicion de i: "+i
-			;
-		}
-		
-		function convertirAngulos(){
-			var lat1=4.758081956693753;
-			var lat2=-74.150869846344;
-			var R = 6371e3; // metres
-			var φ1 = lat1.toRadians();
-			var φ2 = lat2.toRadians();
-			var Δφ = (lat2-lat1).toRadians();
-			var Δλ = (lon2-lon1).toRadians();
-			var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
-					Math.cos(φ1) * Math.cos(φ2) *
-					Math.sin(Δλ/2) * Math.sin(Δλ/2);
-			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-			var d = R * c;
-			document.getElementById("Respuesta").innerHTML = "El area es: "+ d
 			;
 		}
 
         </script>
       </div>
+
   </body>
 </html>
