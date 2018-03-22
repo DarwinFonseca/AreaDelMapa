@@ -1,10 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\platforms",
-    "\\plugins",
-    "\\www"
+    "\\www",
+    "\\www\\css"
   ],
-  "SelectedNode": "\\www\\index.html",
+  "SelectedNode": "\\www\\css\\index.css",
   "PreviewInSolutionExplorer": false
 }
